@@ -18,7 +18,7 @@ const props = defineProps({
   color      : String
 });
 
-const chartName = "default";
+const chartName = "simplestack";
 
 /**
  * CONFIG
