@@ -2,7 +2,7 @@
   "name": "simple-stack-base-plugin",
   "version": "1.0.0",
   "description": "plugin de barras sencillas",
-  "main": "index.js",
+  "main": "./dist/SimpleStackPlugin.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
