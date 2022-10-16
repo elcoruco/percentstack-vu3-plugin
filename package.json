@@ -1,7 +1,7 @@
 {
-  "name": "vue-base-plugin",
+  "name": "simple-stack-base-plugin",
   "version": "1.0.0",
-  "description": "base de otros plugins",
+  "description": "plugin de barras sencillas",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
