@@ -57,6 +57,17 @@ const rect = computed( () => {
 const scale = computed( () => {
   return scaleLinear().domain([0, 100]).range([0, rect.value.width])
 });
+
+const leftMargin = (data, index) => {
+  if(!index) return 0;
+
+  let margin = 0;
+  for(let i = 0; i < index; i++){
+    margin += scale.value(data[i].value)
+  }
+
+  return margin;
+}
 </script>
 <template>
   <div :class="`gf_${chartName}_container`">
@@ -82,6 +93,7 @@ const scale = computed( () => {
         :width="scale(d.value)" 
         :height="rect.height" 
         :fill="d.color || color"
+        :x="leftMargin(data, i)"
         :key="`bar-${i}`"></rect>
       </g>
 
