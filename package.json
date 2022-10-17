@@ -4,6 +4,7 @@
   "description": "simple stack shit",
   "main": "./dist/SimpleStackPlugin.js",
   "dependencies": {
+    "d3-scale": "^4.0.2",
     "vue": "^3.2.41"
   },
   "devDependencies": {

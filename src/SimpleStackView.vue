@@ -4,6 +4,7 @@
  * 
  */
 import { ref, computed } from "vue";
+import { scaleLinear } from "d3-scale";
 
 /**
  * PROPERTIES
@@ -50,6 +51,10 @@ const rect = computed( () => {
     height : height.value - margin.value.top - margin.value.bottom
   }
 });
+
+const scale = computed( () => {
+  return scaleLinear().domain([0, 100]).range([0, rect.value.width])
+});
 </script>
 <template>
   <div :class="`gf_${chartName}_container`">
@@ -70,6 +75,12 @@ const rect = computed( () => {
       <!-- bars -->
       <g :transform="`translate(${margin.left}, ${margin.top})`">
         <rect :width="rect.width" :height="rect.height" :fill="baseColor"></rect>
+
+        <rect v-for="(d, i) of data" 
+        :width="scale(d.value)" 
+        :height="rect.height" 
+        :fill="baseColor"
+        :key="`bar-${i}`"></rect>
       </g>
 
       <!-- xScaleAxis -->
