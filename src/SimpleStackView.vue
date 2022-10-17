@@ -74,8 +74,9 @@ const rect = computed( () => {
 
       <!-- xScaleAxis -->
       <g :transform="`translate(0, ${height - margin.bottom})`">
-        <text x="0" y="0">0%</text>
-        <text :x="rect.width" y="0">100%</text>
+        <text x="0" y="0" alignment-baseline="hanging">0%</text>
+        <text :x="rect.width/2" y="0" alignment-baseline="hanging">50%</text>
+        <text :x="rect.width" y="0" alignment-baseline="hanging">100%</text>
       </g>
     </svg>
   </div>
