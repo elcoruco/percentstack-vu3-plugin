@@ -35,6 +35,8 @@ const defaultWidth  = ref(400);
 const defaultColor      = ref('black');
 const defaultBackground = ref("white");
 const defaultBaseColor  = ref("#ECECEC");
+const defaultTextColor = ref("#C6C6C6");
+const defaultTextMargin = ref(5);
 
 // PROPERTIES
 //
@@ -85,9 +87,9 @@ const scale = computed( () => {
 
       <!-- xScaleAxis -->
       <g :transform="`translate(0, ${height - margin.bottom})`">
-        <text fill="#C6C6C6" :x="margin.left" y="0" alignment-baseline="hanging" text-anchor="start">0%</text>
-        <text fill="#C6C6C6" :x="margin.left + rect.width/2" y="0" alignment-baseline="hanging"  text-anchor="middle">50%</text>
-        <text fill="#C6C6C6" :x="margin.left + rect.width" y="0" alignment-baseline="hanging"  text-anchor="end">100%</text>
+        <text :fill="defaultTextColor" :x="margin.left" :y="defaultTextMargin" alignment-baseline="hanging" text-anchor="start">0%</text>
+        <text :fill="defaultTextColor" :x="margin.left + rect.width/2" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="middle">50%</text>
+        <text :fill="defaultTextColor" :x="margin.left + rect.width" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="end">100%</text>
       </g>
     </svg>
   </div>
