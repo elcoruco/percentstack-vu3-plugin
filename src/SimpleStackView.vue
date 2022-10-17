@@ -42,7 +42,7 @@ const height     = computed( () => props.height || defaultHeight.value)
 const background = computed( () => props.background || defaultBackground.value)
 const margin     = computed( () => props.margin || defaultMargin.value)
 const color      = computed( () => props.color || defaultColor.value)
-const baseColor  = computed( () => props.color || defaultBaseColor.value)
+const baseColor  = computed( () => props.baseColor || defaultBaseColor.value)
 
 const rect = computed( () => {
   return {
