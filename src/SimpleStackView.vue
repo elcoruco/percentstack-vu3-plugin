@@ -15,7 +15,8 @@ const props = defineProps({
   background : String,
   data       : Array,
   margin     : Object,
-  color      : String
+  color      : String,
+  baseColor  : String
 });
 
 const chartName = "simplestack";
@@ -32,6 +33,7 @@ const defaultHeight = ref(400);
 const defaultWidth  = ref(400);
 const defaultColor      = ref('black');
 const defaultBackground = ref("white");
+const defaultBaseColor  = ref("grey");
 
 // PROPERTIES
 //
@@ -40,9 +42,17 @@ const height     = computed( () => props.height || defaultHeight.value)
 const background = computed( () => props.background || defaultBackground.value)
 const margin     = computed( () => props.margin || defaultMargin.value)
 const color      = computed( () => props.color || defaultColor.value)
+const baseColor  = computed( () => props.color || defaultBaseColor.value)
+
+const rect = computed( () => {
+  return {
+    width : width.value - margin.value.left - margin.value.right,
+    height : height.value - margin.value.top - margin.value.bottom
+  }
+});
 </script>
 <template>
-  <div class="gf_name_container">
+  <div :class="`gf_${chartName}_container`">
     <h1></h1>
     <svg
       ref="svg"
@@ -56,6 +66,15 @@ const color      = computed( () => props.color || defaultColor.value)
       stroke-linecap="round"
       stroke-linejoin="round"
       :class="`gf_${chartName}_svg`">
+
+      <!-- bars -->
+      <g :transform="`translate(${margin.left}, ${margin.top})`">
+        <rect :width="rect.width" :height="rect.height" :fill="baseColor"></rect>
+      </g>
+
+      <!-- xScaleAxis -->
+      <g :transform="`translate(0, ${height - margin.bottom})`">
+      </g>
     </svg>
   </div>
 </template>
