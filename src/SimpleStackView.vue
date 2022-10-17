@@ -34,7 +34,7 @@ const defaultHeight = ref(400);
 const defaultWidth  = ref(400);
 const defaultColor      = ref('black');
 const defaultBackground = ref("white");
-const defaultBaseColor  = ref("grey");
+const defaultBaseColor  = ref("#ECECEC");
 
 // PROPERTIES
 //
@@ -85,9 +85,9 @@ const scale = computed( () => {
 
       <!-- xScaleAxis -->
       <g :transform="`translate(0, ${height - margin.bottom})`">
-        <text :x="margin.left" y="0" alignment-baseline="hanging" text-anchor="start">0%</text>
-        <text :x="margin.left + rect.width/2" y="0" alignment-baseline="hanging"  text-anchor="middle">50%</text>
-        <text :x="margin.left + rect.width" y="0" alignment-baseline="hanging"  text-anchor="end">100%</text>
+        <text :fill="baseColor" :x="margin.left" y="0" alignment-baseline="hanging" text-anchor="start">0%</text>
+        <text :fill="baseColor" :x="margin.left + rect.width/2" y="0" alignment-baseline="hanging"  text-anchor="middle">50%</text>
+        <text :fill="baseColor" :x="margin.left + rect.width" y="0" alignment-baseline="hanging"  text-anchor="end">100%</text>
       </g>
     </svg>
   </div>
