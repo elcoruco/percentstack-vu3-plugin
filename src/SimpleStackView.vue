@@ -79,7 +79,7 @@ const scale = computed( () => {
         <rect v-for="(d, i) of data" 
         :width="scale(d.value)" 
         :height="rect.height" 
-        :fill="baseColor"
+        :fill="d.color || color"
         :key="`bar-${i}`"></rect>
       </g>
 
