@@ -17,7 +17,8 @@ const props = defineProps({
   data       : Array,
   margin     : Object,
   color      : String,
-  baseColor  : String
+  baseColor  : String,
+  axis       : Object
 });
 
 const chartName = "simplestack";
@@ -29,14 +30,15 @@ const chartName = "simplestack";
 
 // DEFAULT VALUES
 //
-const defaultMargin = ref({top : 10, right : 10, bottom : 50, left : 50});
-const defaultHeight = ref(400);
-const defaultWidth  = ref(400);
+const defaultMargin     = ref({top : 10, right : 10, bottom : 50, left : 50});
+const defaultHeight     = ref(400);
+const defaultWidth      = ref(400);
 const defaultColor      = ref('black');
 const defaultBackground = ref("white");
 const defaultBaseColor  = ref("#ECECEC");
-const defaultTextColor = ref("#C6C6C6");
+const defaultTextColor  = ref("#C6C6C6");
 const defaultTextMargin = ref(5);
+const defaultAxis       = { position : "bottom", class : "", domain : [0, 100]}
 
 // PROPERTIES
 //
@@ -46,6 +48,7 @@ const background = computed( () => props.background || defaultBackground.value)
 const margin     = computed( () => props.margin || defaultMargin.value)
 const color      = computed( () => props.color || defaultColor.value)
 const baseColor  = computed( () => props.baseColor || defaultBaseColor.value)
+const axis       = computed( () => props.axis ? Object.assign(defaultAxis, props.axis) : defaultAxis )
 
 const rect = computed( () => {
   return {
@@ -99,9 +102,9 @@ const leftMargin = (data, index) => {
 
       <!-- xScaleAxis -->
       <g :transform="`translate(0, ${height - margin.bottom})`">
-        <text :fill="defaultTextColor" :x="margin.left" :y="defaultTextMargin" alignment-baseline="hanging" text-anchor="start">0%</text>
-        <text :fill="defaultTextColor" :x="margin.left + rect.width/2" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="middle">50%</text>
-        <text :fill="defaultTextColor" :x="margin.left + rect.width" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="end">100%</text>
+        <text :class="axis.class" :fill="defaultTextColor" :x="margin.left" :y="defaultTextMargin" alignment-baseline="hanging" text-anchor="start">0%</text>
+        <text :class="axis.class" :fill="defaultTextColor" :x="margin.left + rect.width/2" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="middle">50%</text>
+        <text :class="axis.class" :fill="defaultTextColor" :x="margin.left + rect.width" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="end">100%</text>
       </g>
     </svg>
   </div>
