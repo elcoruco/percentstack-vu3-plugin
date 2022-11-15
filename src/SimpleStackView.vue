@@ -38,7 +38,7 @@ const defaultBackground = ref("white");
 const defaultBaseColor  = ref("#ECECEC");
 const defaultTextColor  = ref("#C6C6C6");
 const defaultTextMargin = ref(5);
-const defaultAxis       = { position : "bottom", class : "", domain : [0, 100]}
+const defaultAxis       = { position : "bottom", textClass : "", domain : [0, 100]}
 
 // PROPERTIES
 //
@@ -102,9 +102,9 @@ const leftMargin = (data, index) => {
 
       <!-- xScaleAxis -->
       <g :transform="`translate(0, ${height - margin.bottom})`">
-        <text :class="axis.class" :fill="defaultTextColor" :x="margin.left" :y="defaultTextMargin" alignment-baseline="hanging" text-anchor="start">0%</text>
-        <text :class="axis.class" :fill="defaultTextColor" :x="margin.left + rect.width/2" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="middle">50%</text>
-        <text :class="axis.class" :fill="defaultTextColor" :x="margin.left + rect.width" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="end">100%</text>
+        <text :class="axis.textClass" :fill="defaultTextColor" :x="margin.left" :y="defaultTextMargin" alignment-baseline="hanging" text-anchor="start">0%</text>
+        <text :class="axis.textClass" :fill="defaultTextColor" :x="margin.left + rect.width/2" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="middle">50%</text>
+        <text :class="axis.textClass" :fill="defaultTextColor" :x="margin.left + rect.width" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="end">100%</text>
       </g>
     </svg>
   </div>
