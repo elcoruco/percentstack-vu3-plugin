@@ -42,7 +42,7 @@ const defaultTextMargin = ref(5);
 const defaultAxis       = { position : "bottom", textClass : "", domain : [0, 100]}
 
 const showTooltip       = ref(false);
-const defaultTooltipFn  = d => `${d.key} : ${f(d.value)}`
+const defaultTooltipFn  = d => `${d.key} : ${d.value}`
 const tooltipHTML       = ref("");
 const tooltipTop        = ref('0px');
 const tooltipLeft       = ref('0px');
