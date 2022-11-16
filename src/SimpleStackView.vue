@@ -18,7 +18,8 @@ const props = defineProps({
   margin     : Object,
   color      : String,
   baseColor  : String,
-  axis       : Object
+  axis       : Object,
+  tooltipFn  : Function
 });
 
 const chartName = "simplestack";
@@ -40,6 +41,14 @@ const defaultTextColor  = ref("#C6C6C6");
 const defaultTextMargin = ref(5);
 const defaultAxis       = { position : "bottom", textClass : "", domain : [0, 100]}
 
+const showTooltip       = ref(false);
+const defaultTooltipFn  = d => `${d.key} : ${f(d.value)}`
+const tooltipHTML       = ref("");
+const tooltipTop        = ref('0px');
+const tooltipLeft       = ref('0px');
+const tooltipBackground = ref("white");
+const tooltipOffset     = ref(7);
+
 // PROPERTIES
 //
 const width      = computed( () => props.width || defaultWidth.value)
@@ -49,6 +58,7 @@ const margin     = computed( () => props.margin || defaultMargin.value)
 const color      = computed( () => props.color || defaultColor.value)
 const baseColor  = computed( () => props.baseColor || defaultBaseColor.value)
 const axis       = computed( () => props.axis ? Object.assign(defaultAxis, props.axis) : defaultAxis )
+const tooltipFn  = computed( () => props.tooltipFn || defaultTooltipFn );
 
 const rect = computed( () => {
   return {
@@ -70,6 +80,26 @@ const leftMargin = (data, index) => {
   }
 
   return margin;
+}
+
+/**
+ * TOOLTIP HELPERS
+ * 
+ */
+ const tooltipEnter = (e,d) => {
+  showTooltip.value = true;
+  tooltipHTML.value = tooltipFn.value(d);
+  tooltipTop.value  = `${e.clientY + tooltipOffset.value}px`;
+  tooltipLeft.value = `${e.clientX + tooltipOffset.value}px`;
+}
+
+const tooltipMove = e => {
+  tooltipTop.value  = `${e.clientY + tooltipOffset.value}px`;
+  tooltipLeft.value = `${e.clientX + tooltipOffset.value}px`;
+}
+
+const tooltipOut = () => {
+  showTooltip.value = false;
 }
 </script>
 <template>
@@ -97,6 +127,9 @@ const leftMargin = (data, index) => {
         :height="rect.height" 
         :fill="d.color || color"
         :x="leftMargin(data, i)"
+        @mouseenter="e => tooltipEnter(e, d)"
+        @mousemove="tooltipMove"
+        @mouseout="tooltipOut"
         :key="`bar-${i}`"></rect>
       </g>
 
@@ -107,5 +140,15 @@ const leftMargin = (data, index) => {
         <text :class="axis.textClass" :fill="defaultTextColor" :x="margin.left + rect.width" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="end">100%</text>
       </g>
     </svg>
+    <div class="gf-tooltip" 
+    :style="{
+      top : tooltipTop, 
+      left : tooltipLeft,
+      display : 'block',
+      position : 'fixed',
+      background : tooltipBackground
+    }"
+    v-if="showTooltip"
+    v-html="tooltipHTML"></div>
   </div>
 </template>
