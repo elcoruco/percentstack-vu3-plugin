@@ -1,8 +1,7 @@
 <script setup>
-import SimpleStack from "../../dist/SimpleStackPlugin"
 </script>
 <template>
   <div>
-    yo
+    <gf-simple-stack :data="[{ value : 50}, {value : 10}]" />
   </div>
 </template>
