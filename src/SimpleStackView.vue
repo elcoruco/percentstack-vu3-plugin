@@ -31,16 +31,19 @@ const chartName = "simplestack";
 
 // DEFAULT VALUES
 //
-const defaultMargin     = ref({top : 10, right : 10, bottom : 50, left : 50});
-const defaultHeight     = ref(400);
-const defaultWidth      = ref(400);
-const defaultColor      = ref('black');
-const defaultBackground = ref("white");
-const defaultBaseColor  = ref("#ECECEC");
-const defaultTextColor  = ref("#C6C6C6");
-const defaultTextMargin = ref(5);
+const defaultShowTicks  = true;      
+const defaultProportion = 1/5;
+const defaultWidth      = 400;
+const defaultHeight     = defaultWidth * defaultProportion;
+const defaultColor      = 'red';
+const defaultBackground = "white";
+const defaultBaseColor  = "#ECECEC";
+const defaultTextColor  = "#C6C6C6";
+const defaultTextMargin = 5;
 const defaultAxis       = { position : "bottom", textClass : "", domain : [0, 100]}
+const defaultMargin     = {top : 10, right : 10, bottom : 50, left : 50};
 
+// Tooltip
 const showTooltip       = ref(false);
 const defaultTooltipFn  = d => `${d.key} : ${d.value}`
 const tooltipHTML       = ref("");
@@ -51,12 +54,13 @@ const tooltipOffset     = ref(7);
 
 // PROPERTIES
 //
-const width      = computed( () => props.width || defaultWidth.value)
-const height     = computed( () => props.height || defaultHeight.value)
-const background = computed( () => props.background || defaultBackground.value)
-const margin     = computed( () => props.margin || defaultMargin.value)
-const color      = computed( () => props.color || defaultColor.value)
-const baseColor  = computed( () => props.baseColor || defaultBaseColor.value)
+const width      = computed( () => props.width || defaultWidth)
+const height     = computed( () => props.height || defaultHeight)
+const showTicks  = computed( () => props.showTicks || defaultshowTicks)
+const background = computed( () => props.background || defaultBackground)
+const margin     = computed( () => props.margin || defaultMargin)
+const color      = computed( () => props.color || defaultColor)
+const baseColor  = computed( () => props.baseColor || defaultBaseColor)
 const axis       = computed( () => props.axis ? Object.assign(defaultAxis, props.axis) : defaultAxis )
 const tooltipFn  = computed( () => props.tooltipFn || defaultTooltipFn );
 
