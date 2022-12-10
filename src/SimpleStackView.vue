@@ -21,7 +21,8 @@ const props = defineProps({
   baseColor  : String,
   axis       : Object,
   tooltipFn  : Function,
-  hideTicks  : Boolean
+  hideTicks  : Boolean,
+  max        : Number
 });
 
 const chartName = "simplestack";
@@ -42,15 +43,16 @@ const defaultBackground = "white";
 const defaultBaseColor  = "#ECECEC";
 const defaultTextColor  = "#C6C6C6";
 const defaultTextMargin = 5;
-const defaultDomain     = [0, 100];
+const defaultMin        = 0;
+const defaultMax        = 100;
 const defaultMarginSize = 5;
 const defaultPosition   = "bottom";
-const defaultAxis       = { position : defaultPosition, textClass : "", domain :defaultDomain}
+const defaultAxis       = { position : defaultPosition, textClass : ""}
 const defaultMargin     = {top : defaultMarginSize, right : defaultMarginSize, bottom : defaultHeight / 4, left : defaultMarginSize};
 
 // Tooltip
 const showTooltip       = ref(false);
-const defaultTooltipFn  = d => `${d.key} : ${d.value}`
+const defaultTooltipFn  = d => d.key ? `${d.key} : ${d.value}` : `${d.value}`;
 const tooltipHTML       = ref("");
 const tooltipTop        = ref('0px');
 const tooltipLeft       = ref('0px');
@@ -79,13 +81,30 @@ const margin     = computed( () => {
   else{
     mr = defaultMargin;
   }
-
   return mr;
 })
 const color      = computed( () => props.color || defaultColor)
 const baseColor  = computed( () => props.baseColor || defaultBaseColor)
 const axis       = computed( () => props.axis ? Object.assign(defaultAxis, props.axis) : defaultAxis )
 const tooltipFn  = computed( () => props.tooltipFn || defaultTooltipFn );
+
+const total = computed( () => {
+  try{
+    let sum = props.data.map(d => d.value).reduce( (acc, curr) => acc + curr, 0);
+    return sum;
+  }
+  catch(e){
+    if(!props.data){
+      throw new Error("The data property is required")
+    }
+    else if(!Array.isArray()){
+      throw new Error("The data property must be an Array")
+    }
+    else{
+      throw new Error("Maybe the items of the data array have some problem")
+    }
+  }
+})
 
 const rect = computed( () => {
   return {
@@ -95,7 +114,18 @@ const rect = computed( () => {
 });
 
 const scale = computed( () => {
-  return scaleLinear().domain([0, 100]).range([0, rect.value.width])
+  let max;
+  if(props.max){
+    max = props.max;
+  }
+  else if(total.value > 100){
+    max = total.value;
+  }
+  else{
+    max = defaultMax;
+  }
+
+  return scaleLinear().domain([0, max]).range([0, rect.value.width])
 });
 
 const leftMargin = (data, index) => {
