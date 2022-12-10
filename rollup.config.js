@@ -9,6 +9,6 @@ export default {
     format : 'esm',
     file : 'dist/SimpleStackPlugin.js'
   },
-  external : ["vue"],
+  external : ["vue", "d3-scale"],
   plugins: [ summary(), vue(), resolve(), terser() ]
 }

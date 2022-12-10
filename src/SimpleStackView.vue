@@ -5,6 +5,7 @@
  */
 import { ref, computed } from "vue";
 import { scaleLinear } from "d3-scale";
+import { off } from "process";
 
 /**
  * PROPERTIES
@@ -19,7 +20,8 @@ const props = defineProps({
   color      : String,
   baseColor  : String,
   axis       : Object,
-  tooltipFn  : Function
+  tooltipFn  : Function,
+  hideTicks  : Boolean
 });
 
 const chartName = "simplestack";
@@ -31,17 +33,20 @@ const chartName = "simplestack";
 
 // DEFAULT VALUES
 //
-const defaultShowTicks  = true;      
-const defaultProportion = 1/5;
+const defaultHideTicks  = false;      
+const defaultProportion = 1/6;
 const defaultWidth      = 400;
 const defaultHeight     = defaultWidth * defaultProportion;
-const defaultColor      = 'red';
+const defaultColor      = 'orange';
 const defaultBackground = "white";
 const defaultBaseColor  = "#ECECEC";
 const defaultTextColor  = "#C6C6C6";
 const defaultTextMargin = 5;
-const defaultAxis       = { position : "bottom", textClass : "", domain : [0, 100]}
-const defaultMargin     = {top : 10, right : 10, bottom : 50, left : 50};
+const defaultDomain     = [0, 100];
+const defaultMarginSize = 5;
+const defaultPosition   = "bottom";
+const defaultAxis       = { position : defaultPosition, textClass : "", domain :defaultDomain}
+const defaultMargin     = {top : defaultMarginSize, right : defaultMarginSize, bottom : defaultHeight / 4, left : defaultMarginSize};
 
 // Tooltip
 const showTooltip       = ref(false);
@@ -56,9 +61,27 @@ const tooltipOffset     = ref(7);
 //
 const width      = computed( () => props.width || defaultWidth)
 const height     = computed( () => props.height || defaultHeight)
-const showTicks  = computed( () => props.showTicks || defaultshowTicks)
+const hideTicks  = computed( () => props.hideTicks || defaultHideTicks)
 const background = computed( () => props.background || defaultBackground)
-const margin     = computed( () => props.margin || defaultMargin)
+const margin     = computed( () => {
+  let mr;
+  if(props.axis?.position == 'top'){
+    defaultMargin.bottom = defaultMarginSize;
+    defaultMargin.top = defaultHeight / 4
+  }
+  if(props.hideTicks){
+    defaultMargin.top    = defaultMarginSize;
+    defaultMargin.bottom = defaultMarginSize;
+  }
+  if(props.margin){
+    mr = Object.assign({}, defaultMargin, props.margin)
+  }
+  else{
+    mr = defaultMargin;
+  }
+
+  return mr;
+})
 const color      = computed( () => props.color || defaultColor)
 const baseColor  = computed( () => props.baseColor || defaultBaseColor)
 const axis       = computed( () => props.axis ? Object.assign(defaultAxis, props.axis) : defaultAxis )
@@ -105,6 +128,29 @@ const tooltipMove = e => {
 const tooltipOut = () => {
   showTooltip.value = false;
 }
+
+// Methods
+function* colorGenerator() {
+  // infinite loop
+  while (true) {
+    // generate random values for red, green, and blue
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+
+    // yield the generated color as a string in the RGB format
+    yield `rgb(${r}, ${g}, ${b})`;
+  }
+}
+
+const cGenerator = colorGenerator();
+
+const setFill = item => {
+  if(item.color) return item.color;
+  item.color = cGenerator.next().value;
+  return item.color;
+}
+
 </script>
 <template>
   <div :class="`gf_${chartName}_container`">
@@ -129,7 +175,7 @@ const tooltipOut = () => {
         <rect v-for="(d, i) of data" 
         :width="scale(d.value)" 
         :height="rect.height" 
-        :fill="d.color || color"
+        :fill="setFill(d)"
         :x="leftMargin(data, i)"
         @mouseenter="e => tooltipEnter(e, d)"
         @mousemove="tooltipMove"
@@ -138,7 +184,7 @@ const tooltipOut = () => {
       </g>
 
       <!-- xScaleAxis -->
-      <g :transform="`translate(0, ${height - margin.bottom})`">
+      <g :transform="`translate(0, ${height - margin.bottom})`" v-if="!hideTicks">
         <text :class="axis.textClass" :fill="defaultTextColor" :x="margin.left" :y="defaultTextMargin" alignment-baseline="hanging" text-anchor="start">0%</text>
         <text :class="axis.textClass" :fill="defaultTextColor" :x="margin.left + rect.width/2" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="middle">50%</text>
         <text :class="axis.textClass" :fill="defaultTextColor" :x="margin.left + rect.width" :y="defaultTextMargin" alignment-baseline="hanging"  text-anchor="end">100%</text>
