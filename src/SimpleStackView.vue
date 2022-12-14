@@ -5,7 +5,6 @@
  */
 import { ref, computed } from "vue";
 import { scaleLinear } from "d3-scale";
-import { off } from "process";
 
 /**
  * PROPERTIES
